@@ -4,7 +4,7 @@ import { AuthContext } from '../provider/AuthProvider';
 
 const Login = () => {
 
-    const {signIn} = useContext(AuthContext);
+    const { signIn, signInWithGoogle } = useContext(AuthContext);
 
     const handleLogin = event => {
 
@@ -15,10 +15,21 @@ const Login = () => {
         console.log(email, password)
 
         signIn(email, password)
+            .then(result => {
+                const loggedUser = result.user;
+                console.log(loggedUser)
+                form.reset()
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
+    }
+
+    const handleGoogleSignin = () =>{
+        signInWithGoogle()
         .then(result =>{
             const loggedUser = result.user;
             console.log(loggedUser)
-            form.reset()
         })
         .catch(error =>{
             console.log(error.message)
@@ -48,10 +59,13 @@ const Login = () => {
 
                         </div>
                         <label className="label">
-                                <Link to='/register' className="label-text-alt link link-hover">New to Auth Master ?</Link>
-                            </label>
+                            <Link to='/register' className="label-text-alt link link-hover">New to Auth Master ?</Link>
+                        </label>
                         <div className="form-control mt-6">
                             <button className="btn btn-primary">Login</button>
+                        </div>
+                        <div className="form-control mt-6">
+                            <button onClick={handleGoogleSignin} className="btn btn-link">Login With Google</button>
                         </div>
                     </form>
                     {/* <label className="label">
